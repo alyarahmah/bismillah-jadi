@@ -116,7 +116,7 @@ header {
   right: -300px;
   width: 300px;
   height: 100vh;
-  background: white;
+  background: white; /* Pastikan background putih */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease;
   z-index: 200;
@@ -131,7 +131,6 @@ header {
 .nav-list {
   list-style: none;
   padding: 1rem 0;
-  margin: 0;
 }
 
 .nav-list li {
@@ -153,7 +152,6 @@ header {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: inherit;
 }
 
 .nav-list a:hover,
@@ -218,7 +216,6 @@ header {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
-  font-family: inherit;
 }
 
 .notification-btn:hover {
@@ -232,7 +229,6 @@ header {
 
 .notification-btn.subscribed:hover {
   color: #047857;
-  background: #f3f4f6;
 }
 
 .logout-btn {
@@ -415,6 +411,7 @@ header {
   margin-bottom: 1rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -970,88 +967,54 @@ header {
 }
 
 @media screen and (min-width: 1000px) {
-  .main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .navigation-drawer {
     position: static;
+    height: auto; /* PERBAIKAN: Reset tinggi untuk desktop */
     width: auto;
-    height: auto;
     padding: 0;
-    background-color: transparent;
+    background-color: transparent; /* Hanya transparent untuk desktop */
     box-shadow: none;
     transform: translateX(0);
-    right: 0;
-    overflow: visible;
+    display: flex; /* PENINGKATAN: Agar item di dalam nav (menu, user, logout) sejajar */
+    align-items: center;
   }
 
   .nav-list {
     display: flex;
     flex-direction: row;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-  }
-
-  .nav-list li {
-    margin: 0;
+    margin-top: 0;
   }
 
   .nav-list a,
   .nav-list button {
     color: white;
-    padding: 0.75rem 1rem;
-    white-space: nowrap;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
   }
 
   .nav-list a:hover,
   .nav-list button:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
-    border-radius: 6px;
   }
 
   .nav-user {
-    border: none;
-    margin: 0;
+    border-top: none;
+    margin-top: 0;
+    padding: 0.75rem 1.5rem;
   }
 
   .user-info {
     color: rgba(255, 255, 255, 0.8);
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .notification-btn {
-    color: rgba(255, 255, 255, 0.9);
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .notification-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-radius: 6px;
-  }
-
-  .notification-btn.subscribed {
-    color: #10b981;
   }
 
   .logout-btn {
-    color: rgba(255, 255, 255, 0.9) !important;
-    padding: 0.75rem 1rem !important;
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 1.5rem;
   }
 
   .logout-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
-    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
   }
 
   .drawer-button {
