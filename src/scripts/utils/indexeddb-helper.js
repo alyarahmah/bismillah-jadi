@@ -34,7 +34,8 @@ const IndexedDBHelper = {
         savedAt: new Date().toISOString(),
       }
 
-      await objectStore.add(storyWithTimestamp)
+      // Gunakan put() untuk menangani duplicate entries
+      await objectStore.put(storyWithTimestamp)
       console.log("Story saved to IndexedDB:", story.id)
       return true
     } catch (error) {

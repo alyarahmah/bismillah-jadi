@@ -3,6 +3,7 @@ import * as StoryModel from "../models/story-model"
 import * as AuthModel from "../models/auth-model"
 import { showFormattedDate } from "../utils"
 import L from "leaflet"
+import SavedStoriesHelper from "../utils/saved-stories-helper"
 
 export default class HomeView {
   constructor() {
@@ -108,32 +109,40 @@ export default class HomeView {
     const storiesHTML = stories
       .map(
         (story) => `
-      <article class="story-card" data-lat="${story.lat}" data-lon="${story.lon}">
-        <div class="story-image">
-          <img src="${story.photoUrl}" alt="Foto cerita: ${story.description}" loading="lazy" />
-        </div>
-        <div class="story-content">
-          <h3 class="story-title">${story.name}</h3>
-          <p class="story-description">${story.description}</p>
-          <div class="story-meta">
-            <span class="story-date">
-              <i class="fas fa-calendar" aria-hidden="true"></i>
-              ${showFormattedDate(story.createdAt, "id-ID")}
-            </span>
+    <article class="story-card" data-lat="${story.lat}" data-lon="${story.lon}">
+      <div class="story-image">
+        <img src="${story.photoUrl}" alt="Foto cerita: ${story.description}" loading="lazy" />
+      </div>
+      <div class="story-content">
+        <h3 class="story-title">${story.name}</h3>
+        <p class="story-description">${story.description}</p>
+        <div class="story-meta">
+          <span class="story-date">
+            <i class="fas fa-calendar" aria-hidden="true"></i>
+            ${showFormattedDate(story.createdAt, "id-ID")}
+          </span>
+          <div class="story-actions-inline">
             ${
               story.lat && story.lon
                 ? `
               <button class="location-btn" data-lat="${story.lat}" data-lon="${story.lon}" aria-label="Lihat lokasi di peta">
                 <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-                Lihat Lokasi
+                Lokasi
               </button>
             `
                 : ""
             }
+            <button class="save-story-btn ${SavedStoriesHelper.isStorySaved(story.id) ? "saved" : ""}" 
+                    data-story='${JSON.stringify(story)}' 
+                    aria-label="${SavedStoriesHelper.isStorySaved(story.id) ? "Hapus dari simpanan" : "Simpan cerita"}">
+              <i class="fas ${SavedStoriesHelper.isStorySaved(story.id) ? "fa-bookmark" : "fa-bookmark-o"}"></i>
+              ${SavedStoriesHelper.isStorySaved(story.id) ? "Tersimpan" : "Simpan"}
+            </button>
           </div>
         </div>
-      </article>
-    `,
+      </div>
+    </article>
+  `,
       )
       .join("")
 
@@ -145,6 +154,14 @@ export default class HomeView {
         const lat = Number.parseFloat(e.target.dataset.lat)
         const lon = Number.parseFloat(e.target.dataset.lon)
         this.showLocationOnMap(lat, lon)
+      })
+    })
+
+    // Tambahkan event listener untuk tombol save setelah location buttons:
+    container.querySelectorAll(".save-story-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const storyData = JSON.parse(e.target.dataset.story)
+        this.toggleSaveStory(storyData, e.target)
       })
     })
 
@@ -201,5 +218,43 @@ export default class HomeView {
         </button>
       </div>
     `
+  }
+
+  toggleSaveStory(story, buttonElement) {
+    const isCurrentlySaved = SavedStoriesHelper.isStorySaved(story.id)
+
+    if (isCurrentlySaved) {
+      // Remove from saved
+      SavedStoriesHelper.removeSavedStory(story.id)
+      buttonElement.classList.remove("saved")
+      buttonElement.innerHTML = '<i class="fas fa-bookmark-o"></i> Simpan'
+      buttonElement.setAttribute("aria-label", "Simpan cerita")
+      this.showNotification("Cerita dihapus dari simpanan", "success")
+    } else {
+      // Add to saved
+      const success = SavedStoriesHelper.saveStory(story)
+      if (success) {
+        buttonElement.classList.add("saved")
+        buttonElement.innerHTML = '<i class="fas fa-bookmark"></i> Tersimpan'
+        buttonElement.setAttribute("aria-label", "Hapus dari simpanan")
+        this.showNotification("Cerita disimpan!", "success")
+      } else {
+        this.showNotification("Cerita sudah tersimpan sebelumnya", "warning")
+      }
+    }
+  }
+
+  showNotification(message, type = "success") {
+    const notification = document.createElement("div")
+    notification.className = `notification ${type}`
+    notification.innerHTML = `
+      <i class="fas ${type === "success" ? "fa-check-circle" : "fa-exclamation-triangle"}"></i>
+      <span>${message}</span>
+    `
+    document.body.appendChild(notification)
+
+    setTimeout(() => {
+      notification.remove()
+    }, 3000)
   }
 }

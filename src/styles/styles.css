@@ -116,7 +116,7 @@ header {
   right: -300px;
   width: 300px;
   height: 100vh;
-  background: white;
+  background: white; /* Pastikan background putih */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease;
   z-index: 200;
@@ -970,12 +970,13 @@ header {
     position: static;
     width: auto;
     padding: 0;
-    background-color: transparent;
+    background-color: transparent; /* Hanya transparent untuk desktop */
     box-shadow: none;
     transform: translateX(0);
   }
 
   .nav-list {
+    display: flex;
     flex-direction: row;
     margin-top: 0;
   }
@@ -1070,4 +1071,74 @@ header {
 .main-footer p {
   margin: 0;
   opacity: 0.8;
+}
+
+/* Tambahkan di bagian akhir file: */
+
+.story-actions-inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.save-story-btn {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.save-story-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.save-story-btn.saved {
+  background: #fbbf24;
+  color: white;
+  border-color: #f59e0b;
+}
+
+.save-story-btn.saved:hover {
+  background: #f59e0b;
+}
+
+.saved-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #fbbf24;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.saved-stories-section {
+  padding: 40px 0;
+}
+
+.saved-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.notification.warning {
+  background: var(--warning-color);
+  color: white;
 }

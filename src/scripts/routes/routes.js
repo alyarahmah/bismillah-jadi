@@ -4,7 +4,7 @@ import AddStoryView from "../views/add-story-view"
 import LoginView from "../views/login-view"
 import RegisterView from "../views/register-view"
 import NotFoundView from "../views/not-found-view"
-import OfflineStoriesView from "../views/offline-stories-view"
+import SavedStoriesView from "../views/saved-stories-view"
 
 const routes = {
   "/": new HomeView(),
@@ -12,7 +12,7 @@ const routes = {
   "/add-story": new AddStoryView(),
   "/login": new LoginView(),
   "/register": new RegisterView(),
-  "/offline-stories": new OfflineStoriesView(),
+  "/saved-stories": new SavedStoriesView(),
   "/404": new NotFoundView(),
 }
 

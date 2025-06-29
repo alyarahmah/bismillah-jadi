@@ -153,7 +153,7 @@ class App {
       navList.innerHTML = `
         <li><a href="#/"><i class="fas fa-home" aria-hidden="true"></i> Beranda</a></li>
         <li><a href="#/add-story"><i class="fas fa-plus-circle" aria-hidden="true"></i> Tambah Cerita</a></li>
-        <li><a href="#/offline-stories"><i class="fas fa-wifi-slash" aria-hidden="true"></i> Cerita Tersimpan</a></li>
+        <li><a href="#/saved-stories"><i class="fas fa-bookmark" aria-hidden="true"></i> Cerita Disimpan</a></li>
         <li><a href="#/about"><i class="fas fa-info-circle" aria-hidden="true"></i> Tentang</a></li>
         <li class="nav-user">
           <span class="user-info">
@@ -245,6 +245,11 @@ class App {
     this._updateNavigation()
 
     if (url === "/add-story" && !AuthModel.isAuthenticated()) {
+      window.location.hash = "#/login"
+      return
+    }
+
+    if (url === "/saved-stories" && !AuthModel.isAuthenticated()) {
       window.location.hash = "#/login"
       return
     }
