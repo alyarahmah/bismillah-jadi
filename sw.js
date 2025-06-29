@@ -27,36 +27,35 @@ self.addEventListener("install", (event) => {
 
 // Fetch event
 self.addEventListener("fetch", (event) => {
+  // We only want to cache GET requests with http/https-schemes.
+  // This is a common strategy to ignore requests that are not relevant to the app's assets,
+  // especially during development with tools like webpack-dev-server (e.g., HMR, WebSockets)
+  // or requests from browser extensions (chrome-extension://).
+  if (event.request.method !== "GET" || !event.request.url.startsWith("http")) {
+    return
+  }
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached version or fetch from network
-      if (response) {
-        return response
-      }
-
-      return fetch(event.request)
-        .then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== "basic") {
-            return response
-          }
-
-          // Clone the response
-          const responseToCache = response.clone()
-
+    caches.match(event.request).then((cachedResponse) => {
+      // Return cached version if available, otherwise fetch from network
+      return cachedResponse || fetch(event.request).then((networkResponse) => {
+        // If the fetch is successful, clone it and store it in the cache.
+        // We check for a valid, successful response.
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone()
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache)
           })
+        }
 
-          return response
-        })
-        .catch(() => {
-          // Return offline page for navigation requests
-          if (event.request.destination === "document") {
-            return caches.match("/")
-          }
-        })
-    }),
+        return networkResponse
+      }).catch(() => {
+        // If the network request fails, serve the offline page for navigation requests.
+        if (event.request.destination === "document") {
+          return caches.match("/")
+        }
+      })
+    })
   )
 })
 

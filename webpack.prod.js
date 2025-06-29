@@ -1,17 +1,17 @@
-const common = require('./webpack.common.js');
-const { merge } = require('webpack-merge');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const common = require("./webpack.common.js")
+const { merge } = require("webpack-merge")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = merge(common, {
-  mode: 'production',
+  mode: "production",
   module: {
     rules: [
       {
         test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
+          "css-loader",
         ],
       },
       {
@@ -19,9 +19,9 @@ module.exports = merge(common, {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env'],
+              presets: ["@babel/preset-env"],
             },
           },
         ],
@@ -32,4 +32,4 @@ module.exports = merge(common, {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],
-});
+})

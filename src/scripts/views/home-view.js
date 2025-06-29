@@ -123,15 +123,15 @@ export default class HomeView {
           </span>
           <div class="story-actions-inline">
             ${
-              story.lat && story.lon
-                ? `
+  story.lat && story.lon
+    ? `
               <button class="location-btn" data-lat="${story.lat}" data-lon="${story.lon}" aria-label="Lihat lokasi di peta">
                 <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                 Lokasi
               </button>
             `
-                : ""
-            }
+    : ""
+}
             <button class="save-story-btn ${SavedStoriesHelper.isStorySaved(story.id) ? "saved" : ""}" 
                     data-story='${JSON.stringify(story)}' 
                     aria-label="${SavedStoriesHelper.isStorySaved(story.id) ? "Hapus dari simpanan" : "Simpan cerita"}">
@@ -227,7 +227,7 @@ export default class HomeView {
       // Remove from saved
       SavedStoriesHelper.removeSavedStory(story.id)
       buttonElement.classList.remove("saved")
-      buttonElement.innerHTML = '<i class="fas fa-bookmark-o"></i> Simpan'
+      buttonElement.innerHTML = "<i class=\"fas fa-bookmark-o\"></i> Simpan"
       buttonElement.setAttribute("aria-label", "Simpan cerita")
       this.showNotification("Cerita dihapus dari simpanan", "success")
     } else {
@@ -235,7 +235,7 @@ export default class HomeView {
       const success = SavedStoriesHelper.saveStory(story)
       if (success) {
         buttonElement.classList.add("saved")
-        buttonElement.innerHTML = '<i class="fas fa-bookmark"></i> Tersimpan'
+        buttonElement.innerHTML = "<i class=\"fas fa-bookmark\"></i> Tersimpan"
         buttonElement.setAttribute("aria-label", "Hapus dari simpanan")
         this.showNotification("Cerita disimpan!", "success")
       } else {
