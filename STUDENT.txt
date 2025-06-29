@@ -1,0 +1,3 @@
+APP_URL=//localhost:9000
+STORY_API_BASE_URL=https://story-api.dicoding.dev/v1
+MAP_SERVICE_API_KEY=tidak diperlukan untuk OpenStreetMap/Leaflet

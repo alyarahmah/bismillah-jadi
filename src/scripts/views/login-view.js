@@ -1,0 +1,164 @@
+import AuthPresenter from "../presenters/auth-presenter"
+import * as AuthModel from "../models/auth-model"
+
+export default class LoginView {
+  constructor() {
+    // Inject dependencies ke presenter (Dependency Injection)
+    this.presenter = new AuthPresenter(this, AuthModel)
+  }
+
+  async render() {
+    return `
+      <section class="auth-section">
+        <div class="container">
+          <div class="auth-container">
+            <div class="auth-header">
+              <h1><i class="fas fa-sign-in-alt" aria-hidden="true"></i>LOGIN</h1>
+              <p>Masuk untuk berbagi cerita Anda</p>
+            </div>
+            
+            <form id="login-form" class="auth-form" novalidate>
+              <div class="form-group">
+                <label for="email" class="form-label">
+                  <i class="fas fa-envelope" aria-hidden="true"></i>
+                  Email *
+                </label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  class="form-control" 
+                  placeholder="nama@email.com"
+                  required
+                  aria-describedby="email-help"
+                />
+                <small id="email-help" class="form-help">Masukkan email yang valid</small>
+                <div class="error-message" id="email-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label">
+                  <i class="fas fa-lock" aria-hidden="true"></i>
+                  Password *
+                </label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  class="form-control" 
+                  placeholder="Masukkan password"
+                  required
+                  aria-describedby="password-help"
+                />
+                <small id="password-help" class="form-help">Minimal 8 karakter</small>
+                <div class="error-message" id="password-error"></div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" id="login-btn" class="btn btn-primary btn-full">
+                  <i class="fas fa-sign-in-alt"></i> Masuk
+                </button>
+              </div>
+            </form>
+            
+            <div class="auth-footer">
+              <p>Belum punya akun? <a href="#/register">Daftar di sini</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    `
+  }
+
+  async afterRender() {
+    this.initializeForm()
+  }
+
+  initializeForm() {
+    const form = document.getElementById("login-form")
+    form.addEventListener("submit", (e) => this.handleSubmit(e))
+  }
+
+  async handleSubmit(event) {
+    event.preventDefault()
+
+    if (!this.validateForm()) {
+      return
+    }
+
+    const email = document.getElementById("email").value
+    const password = document.getElementById("password").value
+
+    await this.presenter.handleLogin({ email, password })
+  }
+
+  validateForm() {
+    let isValid = true
+
+    const email = document.getElementById("email").value.trim()
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      document.getElementById("email-error").textContent = "Format email tidak valid"
+      isValid = false
+    } else {
+      document.getElementById("email-error").textContent = ""
+    }
+
+    const password = document.getElementById("password").value
+    if (password.length < 8) {
+      document.getElementById("password-error").textContent = "Password minimal 8 karakter"
+      isValid = false
+    } else {
+      document.getElementById("password-error").textContent = ""
+    }
+
+    return isValid
+  }
+
+  // Methods yang dipanggil oleh presenter
+  showLoading() {
+    document.getElementById("loading").style.display = "flex"
+    document.getElementById("login-btn").disabled = true
+  }
+
+  hideLoading() {
+    document.getElementById("loading").style.display = "none"
+    document.getElementById("login-btn").disabled = false
+  }
+
+  showSuccess(message) {
+    const notification = document.createElement("div")
+    notification.className = "notification success"
+    notification.innerHTML = `
+      <i class="fas fa-check-circle"></i>
+      <span>${message}</span>
+    `
+    document.body.appendChild(notification)
+
+    setTimeout(() => {
+      notification.remove()
+    }, 3000)
+  }
+
+  showError(message) {
+    const notification = document.createElement("div")
+    notification.className = "notification error"
+    notification.innerHTML = `
+      <i class="fas fa-exclamation-circle"></i>
+      <span>${message}</span>
+    `
+    document.body.appendChild(notification)
+
+    setTimeout(() => {
+      notification.remove()
+    }, 5000)
+  }
+
+  redirectToHome() {
+    window.location.hash = "#/"
+  }
+
+  redirectToLogin() {
+    window.location.hash = "#/login"
+  }
+}

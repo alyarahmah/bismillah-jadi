@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Platform berbagi cerita untuk menginspirasi dunia" />
+    <meta name="theme-color" content="#2563eb" />
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="StoryBegin" />
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <title>Story Begin - Berbagi Cerita</title>
+  </head>
+  <body>
+    <header role="banner">
+      <div class="main-header container">
+        <a href="#main-content" class="skip-link">Skip to main content</a>
+        <a class="brand-name" href="#/">
+          <i class="fas fa-book-open" aria-hidden="true"></i>
+          Story Begin
+        </a>
+
+        <nav id="navigation-drawer" class="navigation-drawer" role="navigation" aria-label="Main navigation">
+          <ul id="nav-list" class="nav-list">
+          </ul>
+        </nav>
+
+        <button id="drawer-button" class="drawer-button" aria-label="Toggle navigation menu" aria-expanded="false">
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content" role="main" tabindex="-1"></main>
+    
+    <footer role="contentinfo" class="main-footer">
+      <div class="container">
+        <p>&copy; 2025 Story Begin. Dicoding Submission by Alya Siti Rahmah</p>
+      </div>
+    </footer>
+    
+    <div id="loading" class="loading-overlay" aria-hidden="true">
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Memuat...</p>
+      </div>
+    </div>
+  </body>
+</html>
