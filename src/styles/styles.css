@@ -116,7 +116,7 @@ header {
   right: -300px;
   width: 300px;
   height: 100vh;
-  background: white; /* Pastikan background putih */
+  background: white;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease;
   z-index: 200;
@@ -131,6 +131,7 @@ header {
 .nav-list {
   list-style: none;
   padding: 1rem 0;
+  margin: 0;
 }
 
 .nav-list li {
@@ -152,6 +153,7 @@ header {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit;
 }
 
 .nav-list a:hover,
@@ -216,6 +218,7 @@ header {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit;
 }
 
 .notification-btn:hover {
@@ -229,6 +232,7 @@ header {
 
 .notification-btn.subscribed:hover {
   color: #047857;
+  background: #f3f4f6;
 }
 
 .logout-btn {
@@ -966,51 +970,88 @@ header {
 }
 
 @media screen and (min-width: 1000px) {
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .navigation-drawer {
     position: static;
     width: auto;
+    height: auto;
     padding: 0;
-    background-color: transparent; /* Hanya transparent untuk desktop */
+    background-color: transparent;
     box-shadow: none;
     transform: translateX(0);
+    right: 0;
+    overflow: visible;
   }
 
   .nav-list {
     display: flex;
     flex-direction: row;
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .nav-list li {
+    margin: 0;
   }
 
   .nav-list a,
   .nav-list button {
     color: white;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+    font-size: 0.9rem;
   }
 
   .nav-list a:hover,
   .nav-list button:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
+    border-radius: 6px;
   }
 
   .nav-user {
-    border-top: none;
-    margin-top: 0;
-    padding: 0.75rem 1.5rem;
+    border: none;
+    margin: 0;
   }
 
   .user-info {
     color: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .notification-btn {
+    color: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .notification-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 6px;
+  }
+
+  .notification-btn.subscribed {
+    color: #10b981;
   }
 
   .logout-btn {
-    color: rgba(255, 255, 255, 0.9);
-    padding: 0.75rem 1.5rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem;
   }
 
   .logout-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-radius: 6px;
   }
 
   .drawer-button {
