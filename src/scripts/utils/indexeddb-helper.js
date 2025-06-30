@@ -61,6 +61,23 @@ const IndexedDBHelper = {
     }
   },
 
+  async getStory(id) {
+    try {
+      const db = await this.openDB()
+      const transaction = db.transaction([this.objectStoreName], "readonly")
+      const objectStore = transaction.objectStore(this.objectStoreName)
+
+      return new Promise((resolve, reject) => {
+        const request = objectStore.get(id)
+        request.onsuccess = () => resolve(request.result)
+        request.onerror = () => reject(request.error)
+      })
+    } catch (error) {
+      console.error(`Failed to get story ${id} from IndexedDB:`, error)
+      return null
+    }
+  },
+
   async deleteStory(id) {
     try {
       const db = await this.openDB()

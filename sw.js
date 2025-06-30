@@ -1,4 +1,5 @@
 const CACHE_NAME = "storybegin-v1"
+const API_BASE_URL = "https://story-api.dicoding.dev/v1" // Tambahkan base URL API Anda
 const urlsToCache = [
   "/",
   "/manifest.json",
@@ -17,6 +18,7 @@ const urlsToCache = [
 
 // Install event
 self.addEventListener("install", (event) => {
+  self.skipWaiting() // <-- TAMBAHKAN INI: Paksa SW untuk aktif segera
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log("Opened cache")
@@ -35,32 +37,46 @@ self.addEventListener("fetch", (event) => {
     return
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Return cached version if available, otherwise fetch from network
-      return cachedResponse || fetch(event.request).then((networkResponse) => {
-        // If the fetch is successful, clone it and store it in the cache.
-        // We check for a valid, successful response.
-        if (networkResponse && networkResponse.status === 200) {
+  // Strategi Network-First untuk permintaan API
+  if (event.request.url.startsWith(API_BASE_URL)) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          // Jika berhasil, simpan ke cache dan kembalikan respons jaringan
           const responseToCache = networkResponse.clone()
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache)
           })
-        }
+          return networkResponse
+        })
+        .catch(() => {
+          // Jika jaringan gagal, coba ambil dari cache
+          return caches.match(event.request)
+        }),
+    )
+    return
+  }
 
-        return networkResponse
-      }).catch(() => {
-        // If the network request fails, serve the offline page for navigation requests.
-        if (event.request.destination === "document") {
-          return caches.match("/")
-        }
-      })
-    })
+  // Strategi Cache-First untuk aset statis (default)
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      return (
+        cachedResponse ||
+        fetch(event.request).then((networkResponse) => {
+          const responseToCache = networkResponse.clone()
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache)
+          })
+          return networkResponse
+        })
+      )
+    }),
   )
 })
 
 // Activate event
 self.addEventListener("activate", (event) => {
+  event.waitUntil(clients.claim()) // <-- TAMBAHKAN INI: Ambil kontrol halaman segera
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
